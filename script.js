@@ -3,6 +3,7 @@ class PixelArtApp {
         this.gridSize = 32
         this.currentColor = '#000000'
         this.currentTool = 'pencil'
+        this.eyedropperActive = false
         this.isDrawing = false
         this.drawStartPos = null
         this.opacity = 1
@@ -98,6 +99,11 @@ class PixelArtApp {
         document.getElementById('patternsBtn').addEventListener('click', () => {
             document.getElementById('patternsModal').style.display = 'flex'
         })
+        document.getElementById('eyedropperBtn').addEventListener('click', () => {
+            document.querySelector('.tool-btn.active').classList.remove('active')
+            document.getElementById('eyedropperBtn').classList.add('active')
+            this.currentTool = 'eyedropper'
+        })
 
         document.querySelectorAll('.pattern-btn').forEach(btn => {
             btn.addEventListener('click', () => {
@@ -157,17 +163,42 @@ class PixelArtApp {
             this.erasePixel(row, col)
         } else if (this.currentTool === 'fill') {
             this.fillArea(row, col)
+        } else if (this.currentTool === 'eyedropper') {
+            this.pickColor(index)
+        }
+    }
+
+    pickColor(index) {
+        let pickedColor = ''
+        for (let i = this.layers.length - 1; i >= 0; i--) {
+            const layer = this.layers[i]
+            if (layer.visible && layer.data[index]) {
+                pickedColor = layer.data[index]
+                break
+            }
+        }
+        
+        if (pickedColor) {
+            this.currentColor = pickedColor
+            document.getElementById('colorPicker').value = pickedColor
         }
     }
 
     drawPixel(row, col) {
-        for (let i = -this.brushSize + 1; i < this.brushSize; i++) {
-            for (let j = -this.brushSize + 1; j < this.brushSize; j++) {
+        const halfBrush = Math.floor(this.brushSize / 2)
+        
+        for (let i = -halfBrush; i <= halfBrush; i++) {
+            for (let j = -halfBrush; j <= halfBrush; j++) {
                 const newRow = row + i
                 const newCol = col + j
-                if (newRow >= 0 && newRow < this.gridSize && newCol >= 0 && newCol < this.gridSize) {
-                    const index = newRow * this.gridSize + newCol
-                    this.layers[this.activeLayer].data[index] = this.currentColor
+                
+                if (this.brushSize === 1 || 
+                    (this.brushSize > 1 && Math.abs(i) + Math.abs(j) <= halfBrush)) {
+                    
+                    if (newRow >= 0 && newRow < this.gridSize && newCol >= 0 && newCol < this.gridSize) {
+                        const index = newRow * this.gridSize + newCol
+                        this.layers[this.activeLayer].data[index] = this.currentColor
+                    }
                 }
             }
         }
@@ -175,13 +206,20 @@ class PixelArtApp {
     }
 
     erasePixel(row, col) {
-        for (let i = -this.brushSize + 1; i < this.brushSize; i++) {
-            for (let j = -this.brushSize + 1; j < this.brushSize; j++) {
+        const halfBrush = Math.floor(this.brushSize / 2)
+        
+        for (let i = -halfBrush; i <= halfBrush; i++) {
+            for (let j = -halfBrush; j <= halfBrush; j++) {
                 const newRow = row + i
                 const newCol = col + j
-                if (newRow >= 0 && newRow < this.gridSize && newCol >= 0 && newCol < this.gridSize) {
-                    const index = newRow * this.gridSize + newCol
-                    this.layers[this.activeLayer].data[index] = ''
+                
+                if (this.brushSize === 1 || 
+                    (this.brushSize > 1 && Math.abs(i) + Math.abs(j) <= halfBrush)) {
+                    
+                    if (newRow >= 0 && newRow < this.gridSize && newCol >= 0 && newCol < this.gridSize) {
+                        const index = newRow * this.gridSize + newCol
+                        this.layers[this.activeLayer].data[index] = ''
+                    }
                 }
             }
         }
