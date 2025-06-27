@@ -4,6 +4,7 @@ class PixelArtApp {
         this.currentColor = '#000000'
         this.currentTool = 'pencil'
         this.eyedropperActive = false
+        this.symmetryMode = 'none'
         this.isDrawing = false
         this.drawStartPos = null
         this.opacity = 1
@@ -104,6 +105,18 @@ class PixelArtApp {
             document.getElementById('eyedropperBtn').classList.add('active')
             this.currentTool = 'eyedropper'
         })
+        document.getElementById('symmetryBtn').addEventListener('click', () => {
+            const symmetrySelect = document.getElementById('symmetryMode')
+            const modes = ['none', 'horizontal', 'vertical', 'both']
+            const currentIndex = modes.indexOf(this.symmetryMode)
+            const nextIndex = (currentIndex + 1) % modes.length
+            this.symmetryMode = modes[nextIndex]
+            symmetrySelect.value = this.symmetryMode
+        })
+
+        document.getElementById('symmetryMode').addEventListener('change', (e) => {
+            this.symmetryMode = e.target.value
+        })
 
         document.querySelectorAll('.pattern-btn').forEach(btn => {
             btn.addEventListener('click', () => {
@@ -152,19 +165,45 @@ class PixelArtApp {
         })
     }
 
-    draw(pixel) {
-        const index = parseInt(pixel.dataset.index)
-        const row = Math.floor(index / this.gridSize)
-        const col = index % this.gridSize
+    drawPixel(row, col) {
+        this.drawPixelAtPosition(row, col)
+        
+        if (this.symmetryMode === 'horizontal' || this.symmetryMode === 'both') {
+            const mirrorRow = this.gridSize - 1 - row
+            this.drawPixelAtPosition(mirrorRow, col)
+        }
+        
+        if (this.symmetryMode === 'vertical' || this.symmetryMode === 'both') {
+            const mirrorCol = this.gridSize - 1 - col
+            this.drawPixelAtPosition(row, mirrorCol)
+        }
+        
+        if (this.symmetryMode === 'both') {
+            const mirrorRow = this.gridSize - 1 - row
+            const mirrorCol = this.gridSize - 1 - col
+            this.drawPixelAtPosition(mirrorRow, mirrorCol)
+        }
+        
+        this.updateCanvas()
+    }
 
-        if (this.currentTool === 'pencil') {
-            this.drawPixel(row, col)
-        } else if (this.currentTool === 'eraser') {
-            this.erasePixel(row, col)
-        } else if (this.currentTool === 'fill') {
-            this.fillArea(row, col)
-        } else if (this.currentTool === 'eyedropper') {
-            this.pickColor(index)
+    drawPixelAtPosition(row, col) {
+        const halfBrush = Math.floor(this.brushSize / 2)
+        
+        for (let i = -halfBrush; i <= halfBrush; i++) {
+            for (let j = -halfBrush; j <= halfBrush; j++) {
+                const newRow = row + i
+                const newCol = col + j
+                
+                if (this.brushSize === 1 || 
+                    (this.brushSize > 1 && Math.abs(i) + Math.abs(j) <= halfBrush)) {
+                    
+                    if (newRow >= 0 && newRow < this.gridSize && newCol >= 0 && newCol < this.gridSize) {
+                        const index = newRow * this.gridSize + newCol
+                        this.layers[this.activeLayer].data[index] = this.currentColor
+                    }
+                }
+            }
         }
     }
 
@@ -206,6 +245,28 @@ class PixelArtApp {
     }
 
     erasePixel(row, col) {
+        this.erasePixelAtPosition(row, col)
+        
+        if (this.symmetryMode === 'horizontal' || this.symmetryMode === 'both') {
+            const mirrorRow = this.gridSize - 1 - row
+            this.erasePixelAtPosition(mirrorRow, col)
+        }
+        
+        if (this.symmetryMode === 'vertical' || this.symmetryMode === 'both') {
+            const mirrorCol = this.gridSize - 1 - col
+            this.erasePixelAtPosition(row, mirrorCol)
+        }
+        
+        if (this.symmetryMode === 'both') {
+            const mirrorRow = this.gridSize - 1 - row
+            const mirrorCol = this.gridSize - 1 - col
+            this.erasePixelAtPosition(mirrorRow, mirrorCol)
+        }
+        
+        this.updateCanvas()
+    }
+
+    erasePixelAtPosition(row, col) {
         const halfBrush = Math.floor(this.brushSize / 2)
         
         for (let i = -halfBrush; i <= halfBrush; i++) {
@@ -223,7 +284,6 @@ class PixelArtApp {
                 }
             }
         }
-        this.updateCanvas()
     }
 
     fillArea(row, col) {
