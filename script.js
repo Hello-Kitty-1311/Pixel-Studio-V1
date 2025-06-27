@@ -4,6 +4,7 @@ class PixelArtApp {
         this.currentColor = '#FF69B4'
         this.currentTool = 'pencil'
         this.isDrawing = false
+        this.brushSize = 1
         this.canvas = document.getElementById('pixelCanvas')
         this.pixels = []
         
@@ -18,6 +19,10 @@ class PixelArtApp {
 
         document.getElementById('colorPicker').addEventListener('input', (e) => {
             this.currentColor = e.target.value
+        })
+
+        document.getElementById('brushSize').addEventListener('input', (e) => {
+            this.brushSize = parseInt(e.target.value)
         })
 
         document.getElementById('canvasSize').addEventListener('change', (e) => {
@@ -56,14 +61,71 @@ class PixelArtApp {
 
     draw(pixel) {
         const index = parseInt(pixel.dataset.index)
+        const row = Math.floor(index / this.gridSize)
+        const col = index % this.gridSize
+
         if (this.currentTool === 'pencil') {
-            this.pixels[index] = this.currentColor
-            pixel.style.backgroundColor = this.currentColor
+            this.drawPixel(row, col)
         } else if (this.currentTool === 'eraser') {
-            this.pixels[index] = ''
-            pixel.style.backgroundColor = 'transparent'
+            this.erasePixel(row, col)
+        } else if (this.currentTool === 'fill') {
+            this.fillArea(row, col)
         }
     }
+
+    drawPixel(row, col) {
+        for (let i = -this.brushSize + 1; i < this.brushSize; i++) {
+            for (let j = -this.brushSize + 1; j < this.brushSize; j++) {
+                const newRow = row + i
+                const newCol = col + j
+                if (newRow >= 0 && newRow < this.gridSize && newCol >= 0 && newCol < this.gridSize) {
+                    const index = newRow * this.gridSize + newCol
+                    this.pixels[index] = this.currentColor
+                    this.canvas.children[index].style.backgroundColor = this.currentColor
+                }
+            }
+        }
+    }
+
+    erasePixel(row, col) {
+        for (let i = -this.brushSize + 1; i < this.brushSize; i++) {
+            for (let j = -this.brushSize + 1; j < this.brushSize; j++) {
+                const newRow = row + i
+                const newCol = col + j
+                if (newRow >= 0 && newRow < this.gridSize && newCol >= 0 && newCol < this.gridSize) {
+                    const index = newRow * this.gridSize + newCol
+                    this.pixels[index] = ''
+                    this.canvas.children[index].style.backgroundColor = 'transparent'
+                }
+            }
+        }
+    }
+
+    fillArea(row, col) {
+        const targetColor = this.pixels[row * this.gridSize + col]
+        const newColor = this.currentColor
+        if (targetColor === newColor) return
+
+        const stack = [[row, col]]
+        const seen = new Set()
+
+        while (stack.length > 0) {
+            const [r, c] = stack.pop()
+            const index = r * this.gridSize + c
+            const key = `${r},${c}`
+
+            if (seen.has(key)) continue
+            seen.add(key)
+
+            if (r < 0 || r >= this.gridSize || c < 0 || c >= this.gridSize) continue
+            if (this.pixels[index] !== targetColor) continue
+
+            this.pixels[index] = newColor
+            this.canvas.children[index].style.backgroundColor = newColor
+
+            stack.push([r + 1, c], [r - 1, c], [r, c + 1], [r, c - 1])
+        }
+    }   
 
     clearCanvas() {
         this.pixels = new Array(this.gridSize * this.gridSize).fill('')

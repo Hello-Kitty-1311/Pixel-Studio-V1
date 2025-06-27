@@ -80,6 +80,24 @@ body {
     align-items: center;
 }
 
+input[type="range"] {
+    -webkit-appearance: none;
+    width: 100px;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    background: var(--cosmic-accent);
+    border-radius: 50%;
+    cursor: pointer;
+}
+
 .action-buttons {
     display: flex;
     gap: 0.5rem;
