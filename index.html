@@ -9,11 +9,41 @@
 <body>
     <div class="container">
         <header class="app-header">
-            <h1>Pixel Verse Studio</h1>
+            <h1 class="title-animated">Pixel Verse Studio</h1>
+            <div class="toolbar">
+                <div class="tool-group">
+                    <div class="color-picker-wrapper">
+                        <input type="color" id="colorPicker" value="#FF69B4">
+                        <label for="colorPicker" class="picker-label">Color</label>
+                    </div>
+                </div>
+                
+                <div class="tool-group">
+                    <select id="canvasSize" class="canvas-select">
+                        <option value="16">16x16</option>
+                        <option value="32" selected>32x32</option>
+                        <option value="64">64x64</option>
+                    </select>
+                </div>
+            </div>
         </header>
+
         <main class="workspace">
-            <div class="canvas-container">
-                <div class="pixel-canvas" id="pixelCanvas"></div>
+            <div class="tools-sidebar">
+                <button class="tool-btn active" id="pencilBtn" title="Pencil">✏️</button>
+                <button class="tool-btn" id="eraserBtn" title="Eraser">🧽</button>
+                <button class="tool-btn" id="fillBtn" title="Fill">🪣</button>
+            </div>
+
+            <div class="canvas-workspace">
+                <div class="canvas-container">
+                    <div class="pixel-canvas" id="pixelCanvas"></div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="action-btn" id="clearBtn">Clear</button>
+                    <button class="action-btn" id="downloadBtn">Download</button>
+                </div>
             </div>
         </main>
     </div>
