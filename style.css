@@ -1,0 +1,35 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: system-ui, -apple-system, sans-serif;
+    min-height: 100vh;
+    background: #0c0118;
+    color: #ffffff;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+.app-header {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.pixel-canvas {
+    width: 500px;
+    height: 500px;
+    display: grid;
+    background: white;
+    border-radius: 10px;
+}
+
+.pixel {
+    border: 1px solid #eee;
+}
