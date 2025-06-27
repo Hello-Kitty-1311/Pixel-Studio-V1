@@ -5,11 +5,14 @@ class PixelArtApp {
         this.currentTool = 'pencil'
         this.isDrawing = false
         this.brushSize = 1
+        this.undoStack = []
+        this.redoStack = []
         this.canvas = document.getElementById('pixelCanvas')
         this.pixels = []
         
         this.initializeCanvas()
         this.setupEventListeners()
+        this.createDefaultPalette()
     }
 
     setupEventListeners() {
@@ -39,6 +42,8 @@ class PixelArtApp {
         })
 
         document.getElementById('clearBtn').addEventListener('click', () => this.clearCanvas())
+        document.getElementById('undoBtn').addEventListener('click', () => this.undo())
+        document.getElementById('redoBtn').addEventListener('click', () => this.redo())
         document.getElementById('downloadBtn').addEventListener('click', () => this.download())
     }
 
@@ -56,7 +61,55 @@ class PixelArtApp {
     }
 
     handleMouseUp() {
-        this.isDrawing = false
+        if (this.isDrawing) {
+            this.isDrawing = false
+            this.saveState()
+        }
+    }
+
+    createDefaultPalette() {
+        const colors = ['#000000', '#FFFFFF', '#FF0000', '#00FF00', '#0000FF', 
+                       '#FFFF00', '#FF00FF', '#00FFFF', '#808080', '#FF9900']
+        const palette = document.querySelector('.color-palette')
+        
+        colors.forEach(color => {
+            const swatch = document.createElement('div')
+            swatch.className = 'color-swatch'
+            swatch.style.backgroundColor = color
+            swatch.addEventListener('click', () => {
+                this.currentColor = color
+                document.getElementById('colorPicker').value = color
+            })
+            palette.appendChild(swatch)
+        })
+    }
+
+    saveState() {
+        this.undoStack.push([...this.pixels])
+        this.redoStack = []
+    }
+
+    undo() {
+        if (this.undoStack.length > 0) {
+            this.redoStack.push([...this.pixels])
+            this.pixels = this.undoStack.pop()
+            this.updateCanvas()
+        }
+    }
+
+    redo() {
+        if (this.redoStack.length > 0) {
+            this.undoStack.push([...this.pixels])
+            this.pixels = this.redoStack.pop()
+            this.updateCanvas()
+        }
+    }
+
+    updateCanvas() {
+        const pixelElements = this.canvas.children
+        for (let i = 0; i < pixelElements.length; i++) {
+            pixelElements[i].style.backgroundColor = this.pixels[i] || 'transparent'
+        }
     }
 
     draw(pixel) {
@@ -128,11 +181,9 @@ class PixelArtApp {
     }   
 
     clearCanvas() {
+        this.saveState()
         this.pixels = new Array(this.gridSize * this.gridSize).fill('')
-        const pixelElements = this.canvas.children
-        for (let pixel of pixelElements) {
-            pixel.style.backgroundColor = 'transparent'
-        }
+        this.updateCanvas()
     }
 
     download() {

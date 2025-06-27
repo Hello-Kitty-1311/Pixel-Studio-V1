@@ -32,6 +32,29 @@ body {
     margin-bottom: 1rem;
 }
 
+.color-palette {
+    display: flex;
+    gap: 0.25rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 200px;
+}
+
+.color-swatch {
+    width: 25px;
+    height: 25px;
+    border-radius: 6px;
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.action-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
 .workspace {
     display: grid;
     grid-template-columns: auto 1fr;
