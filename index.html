@@ -20,6 +20,11 @@
                 </div>
                 
                 <div class="tool-group">
+                    <input type="range" id="opacitySlider" min="0" max="100" value="100">
+                    <label for="opacitySlider" class="slider-label">Opacity</label>
+                </div>
+
+                <div class="tool-group">
                     <input type="range" id="brushSize" min="1" max="4" value="1">
                     <label for="brushSize" class="slider-label">Size</label>
                 </div>
@@ -52,6 +57,14 @@
                     <button class="action-btn" id="clearBtn">Clear</button>
                     <button class="action-btn" id="downloadBtn">Download</button>
                 </div>
+            </div>
+
+            <div class="layers-panel">
+                <h3>Layers</h3>
+                <div class="layers-list"></div>
+                <button class="add-layer-btn">
+                    + Add Layer
+                </button>
             </div>
         </main>
     </div>
