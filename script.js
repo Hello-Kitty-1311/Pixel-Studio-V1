@@ -95,6 +95,16 @@ class PixelArtApp {
         document.getElementById('shapesBtn').addEventListener('click', () => {
             document.getElementById('shapesModal').style.display = 'flex'
         })
+        document.getElementById('patternsBtn').addEventListener('click', () => {
+            document.getElementById('patternsModal').style.display = 'flex'
+        })
+
+        document.querySelectorAll('.pattern-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                this.generatePattern(btn.dataset.pattern)
+                document.getElementById('patternsModal').style.display = 'none'
+            })
+        })
     }
 
     handleMouseDown(e) {
@@ -277,6 +287,71 @@ class PixelArtApp {
             const col = startCol + i
             if (row < this.gridSize && col < this.gridSize) {
                 this.layers[this.activeLayer].data[row * this.gridSize + col] = this.currentColor
+            }
+        }
+        this.updateCanvas()
+    }
+
+    generatePattern(pattern) {
+        this.saveState()
+        
+        switch (pattern) {
+            case 'checkerboard':
+                this.createCheckerboard()
+                break
+            case 'stripes':
+                this.createStripes()
+                break
+            case 'dots':
+                this.createDots()
+                break
+            case 'grid':
+                this.createGrid()
+                break
+        }
+    }
+
+    createCheckerboard() {
+        for (let i = 0; i < this.gridSize; i++) {
+            for (let j = 0; j < this.gridSize; j++) {
+                if ((i + j) % 2 === 0) {
+                    const index = i * this.gridSize + j
+                    this.layers[this.activeLayer].data[index] = this.currentColor
+                }
+            }
+        }
+        this.updateCanvas()
+    }
+
+    createStripes() {
+        for (let i = 0; i < this.gridSize; i++) {
+            if (i % 4 < 2) {
+                for (let j = 0; j < this.gridSize; j++) {
+                    const index = i * this.gridSize + j
+                    this.layers[this.activeLayer].data[index] = this.currentColor
+                }
+            }
+        }
+        this.updateCanvas()
+    }
+
+    createDots() {
+        for (let i = 2; i < this.gridSize; i += 4) {
+            for (let j = 2; j < this.gridSize; j += 4) {
+                const index = i * this.gridSize + j
+                this.layers[this.activeLayer].data[index] = this.currentColor
+            }
+        }
+        this.updateCanvas()
+    }
+
+    createGrid() {
+        for (let i = 0; i < this.gridSize; i++) {
+            for (let j = 0; j < this.gridSize; j++) {
+                if (i % 4 === 0 || j % 4 === 0) {
+                    const index = i * this.gridSize + j
+                    this.layers[this.activeLayer].data[index] = this.currentColor
+                }
             }
         }
         this.updateCanvas()

@@ -57,6 +57,71 @@ body {
     gap: 0.5rem;
 }
 
+.patterns-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.pattern-btn {
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: white;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+.pattern-btn:hover {
+    background: #f8f9fa;
+    border-color: #007bff;
+}
+
+.pattern-preview {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.checkerboard-preview {
+    background: 
+        linear-gradient(45deg, #000 25%, transparent 25%),
+        linear-gradient(-45deg, #000 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #000 75%),
+        linear-gradient(-45deg, transparent 75%, #000 75%);
+    background-size: 10px 10px;
+    background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+}
+
+.stripes-preview {
+    background: repeating-linear-gradient(
+        45deg,
+        #000,
+        #000 2px,
+        transparent 2px,
+        transparent 8px
+    );
+}
+
+.dots-preview {
+    background: 
+        radial-gradient(circle at 25% 25%, #000 2px, transparent 2px),
+        radial-gradient(circle at 75% 75%, #000 2px, transparent 2px);
+    background-size: 10px 10px;
+}
+
+.grid-preview {
+    background: 
+        linear-gradient(#000 1px, transparent 1px),
+        linear-gradient(90deg, #000 1px, transparent 1px);
+    background-size: 8px 8px;
+}
+
 .color-picker-wrapper {
     display: flex;
     flex-direction: column;

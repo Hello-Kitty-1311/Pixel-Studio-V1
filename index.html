@@ -48,11 +48,17 @@
                 <button class="tool-btn" id="eraserBtn">
                     <i class="fas fa-eraser"></i>
                 </button>
+                <button class="tool-btn" id="patternBtn">
+                    <i class="fas fa-chess-board"></i>
+                </button>
                 <button class="tool-btn" id="fillBtn">
                     <i class="fas fa-fill-drip"></i>
                 </button>
                 <button class="tool-btn" id="shapesBtn">
                     <i class="fas fa-shapes"></i>
+                </button>
+                <button class="tool-btn" id="patternsBtn">
+                    <i class="fas fa-th"></i>
                 </button>
             </div>
 
@@ -85,7 +91,7 @@
                 </button>
             </div>
         </main>
-
+        
         <div class="modal shapes-modal" id="shapesModal">
             <div class="modal-content">
                 <div class="modal-header">
@@ -104,6 +110,33 @@
                     </button>
                     <button class="shape-btn" data-shape="line">
                         <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal patterns-modal" id="patternsModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Select Pattern</h3>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="patterns-container">
+                    <button class="pattern-btn" data-pattern="checkerboard">
+                        <div class="pattern-preview checkerboard-preview"></div>
+                        <span>Checkerboard</span>
+                    </button>
+                    <button class="pattern-btn" data-pattern="stripes">
+                        <div class="pattern-preview stripes-preview"></div>
+                        <span>Stripes</span>
+                    </button>
+                    <button class="pattern-btn" data-pattern="dots">
+                        <div class="pattern-preview dots-preview"></div>
+                        <span>Dots</span>
+                    </button>
+                    <button class="pattern-btn" data-pattern="grid">
+                        <div class="pattern-preview grid-preview"></div>
+                        <span>Grid</span>
                     </button>
                 </div>
             </div>
