@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pixel Verse Studio</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -13,24 +14,24 @@
             <div class="toolbar">
                 <div class="tool-group">
                     <div class="color-picker-wrapper">
-                        <input type="color" id="colorPicker" value="#FF69B4">
-                        <label for="colorPicker" class="picker-label">Color</label>
+                        <input type="color" id="colorPicker" value="#000000">
+                        <label for="colorPicker">Color</label>
                     </div>
                     <div class="color-palette"></div>
                 </div>
                 
                 <div class="tool-group">
                     <input type="range" id="opacitySlider" min="0" max="100" value="100">
-                    <label for="opacitySlider" class="slider-label">Opacity</label>
+                    <label for="opacitySlider">Opacity</label>
                 </div>
 
                 <div class="tool-group">
                     <input type="range" id="brushSize" min="1" max="4" value="1">
-                    <label for="brushSize" class="slider-label">Size</label>
+                    <label for="brushSize">Size</label>
                 </div>
 
                 <div class="tool-group">
-                    <select id="canvasSize" class="canvas-select">
+                    <select id="canvasSize">
                         <option value="16">16x16</option>
                         <option value="32" selected>32x32</option>
                         <option value="64">64x64</option>
@@ -41,9 +42,18 @@
 
         <main class="workspace">
             <div class="tools-sidebar">
-                <button class="tool-btn active" id="pencilBtn" title="Pencil">✏️</button>
-                <button class="tool-btn" id="eraserBtn" title="Eraser">🧽</button>
-                <button class="tool-btn" id="fillBtn" title="Fill">🪣</button>
+                <button class="tool-btn active" id="pencilBtn">
+                    <i class="fas fa-pencil-alt"></i>
+                </button>
+                <button class="tool-btn" id="eraserBtn">
+                    <i class="fas fa-eraser"></i>
+                </button>
+                <button class="tool-btn" id="fillBtn">
+                    <i class="fas fa-fill-drip"></i>
+                </button>
+                <button class="tool-btn" id="shapesBtn">
+                    <i class="fas fa-shapes"></i>
+                </button>
             </div>
 
             <div class="canvas-workspace">
@@ -52,10 +62,18 @@
                 </div>
 
                 <div class="action-buttons">
-                    <button class="action-btn" id="undoBtn">Undo</button>
-                    <button class="action-btn" id="redoBtn">Redo</button>
-                    <button class="action-btn" id="clearBtn">Clear</button>
-                    <button class="action-btn" id="downloadBtn">Download</button>
+                    <button class="action-btn" id="undoBtn">
+                        <i class="fas fa-undo"></i>
+                    </button>
+                    <button class="action-btn" id="redoBtn">
+                        <i class="fas fa-redo"></i>
+                    </button>
+                    <button class="action-btn" id="clearBtn">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                    <button class="action-btn" id="downloadBtn">
+                        <i class="fas fa-download"></i>
+                    </button>
                 </div>
             </div>
 
@@ -63,10 +81,33 @@
                 <h3>Layers</h3>
                 <div class="layers-list"></div>
                 <button class="add-layer-btn">
-                    + Add Layer
+                    <i class="fas fa-plus"></i> Add Layer
                 </button>
             </div>
         </main>
+
+        <div class="modal shapes-modal" id="shapesModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Select Shape</h3>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="shapes-container">
+                    <button class="shape-btn" data-shape="rectangle">
+                        <i class="fas fa-square"></i>
+                    </button>
+                    <button class="shape-btn" data-shape="circle">
+                        <i class="fas fa-circle"></i>
+                    </button>
+                    <button class="shape-btn" data-shape="triangle">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <button class="shape-btn" data-shape="line">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>

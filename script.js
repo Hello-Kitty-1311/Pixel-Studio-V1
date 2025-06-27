@@ -1,7 +1,7 @@
 class PixelArtApp {
     constructor() {
         this.gridSize = 32
-        this.currentColor = '#FF69B4'
+        this.currentColor = '#000000'
         this.currentTool = 'pencil'
         this.isDrawing = false
         this.drawStartPos = null
@@ -11,6 +11,7 @@ class PixelArtApp {
         this.activeLayer = 0
         this.undoStack = []
         this.redoStack = []
+        
         this.canvas = document.getElementById('pixelCanvas')
         
         this.initializeCanvas()
@@ -69,6 +70,31 @@ class PixelArtApp {
         document.getElementById('downloadBtn').addEventListener('click', () => this.download())
 
         document.querySelector('.add-layer-btn').addEventListener('click', () => this.addLayer())
+
+        document.querySelectorAll('.shape-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                this.drawShape(btn.dataset.shape)
+                document.getElementById('shapesModal').style.display = 'none'
+            })
+        })
+
+        document.querySelectorAll('.close-modal').forEach(btn => {
+            btn.addEventListener('click', () => {
+                btn.closest('.modal').style.display = 'none'
+            })
+        })
+
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.style.display = 'none'
+                }
+            })
+        })
+
+        document.getElementById('shapesBtn').addEventListener('click', () => {
+            document.getElementById('shapesModal').style.display = 'flex'
+        })
     }
 
     handleMouseDown(e) {
@@ -179,6 +205,83 @@ class PixelArtApp {
         this.updateCanvas()
     }
 
+    drawShape(shape) {
+        const startPos = this.drawStartPos
+        if (startPos === null) return
+
+        const startRow = Math.floor(startPos / this.gridSize)
+        const startCol = startPos % this.gridSize
+        const size = Math.floor(this.gridSize / 4)
+
+        switch (shape) {
+            case 'rectangle':
+                this.drawRectangle(startRow, startCol, size)
+                break
+            case 'circle':
+                this.drawCircle(startRow, startCol, size)
+                break
+            case 'triangle':
+                this.drawTriangle(startRow, startCol, size)
+                break
+            case 'line':
+                this.drawLine(startRow, startCol, size)
+                break
+        }
+        this.saveState()
+    }
+
+    drawRectangle(startRow, startCol, size) {
+        for (let i = 0; i < size; i++) {
+            for (let j = 0; j < size; j++) {
+                const row = startRow + i
+                const col = startCol + j
+                if (row < this.gridSize && col < this.gridSize) {
+                    this.layers[this.activeLayer].data[row * this.gridSize + col] = this.currentColor
+                }
+            }
+        }
+        this.updateCanvas()
+    }
+
+    drawCircle(startRow, startCol, radius) {
+        for (let i = -radius; i <= radius; i++) {
+            for (let j = -radius; j <= radius; j++) {
+                if (i * i + j * j <= radius * radius) {
+                    const row = startRow + i
+                    const col = startCol + j
+                    if (row >= 0 && row < this.gridSize && col >= 0 && col < this.gridSize) {
+                        this.layers[this.activeLayer].data[row * this.gridSize + col] = this.currentColor
+                    }
+                }
+            }
+        }
+        this.updateCanvas()
+    }
+
+    drawTriangle(startRow, startCol, size) {
+        for (let i = 0; i < size; i++) {
+            for (let j = 0; j <= i; j++) {
+                const row = startRow + i
+                const col = startCol + j
+                if (row < this.gridSize && col < this.gridSize) {
+                    this.layers[this.activeLayer].data[row * this.gridSize + col] = this.currentColor
+                }
+            }
+        }
+        this.updateCanvas()
+    }
+
+    drawLine(startRow, startCol, length) {
+        for (let i = 0; i < length; i++) {
+            const row = startRow
+            const col = startCol + i
+            if (row < this.gridSize && col < this.gridSize) {
+                this.layers[this.activeLayer].data[row * this.gridSize + col] = this.currentColor
+            }
+        }
+        this.updateCanvas()
+    }
+
     clearCanvas() {
         this.saveState()
         this.layers[this.activeLayer].data = new Array(this.gridSize * this.gridSize).fill('')
@@ -254,7 +357,7 @@ class PixelArtApp {
     updateLayerSelection() {
         const layerItems = document.querySelectorAll('.layer-item')
         layerItems.forEach((item, index) => {
-            item.style.border = index === this.activeLayer ? '2px solid var(--cosmic-accent)' : 'none'
+            item.style.border = index === this.activeLayer ? '2px solid #007bff' : 'none'
         })
     }
 
