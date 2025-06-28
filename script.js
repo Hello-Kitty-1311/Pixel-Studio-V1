@@ -17,7 +17,9 @@ class PixelArtApp {
         this.activeLayer = 0
         this.undoStack = []
         this.redoStack = []
-        
+        this.onionSkinEnabled = false
+        this.onionOpacity = 0.3
+        this.previousFrameData = null
         this.canvas = document.getElementById('pixelCanvas')
         
         this.initializeCanvas()
@@ -86,6 +88,16 @@ document.getElementById('valSlider').addEventListener('input', this.updateHsvCol
         document.getElementById('downloadBtn').addEventListener('click', () => this.download())
 
         document.querySelector('.add-layer-btn').addEventListener('click', () => this.addLayer())
+        document.getElementById('onionSkinToggle').addEventListener('change', (e) => {
+    this.onionSkinEnabled = e.target.checked
+    this.updateCanvas()
+})
+
+document.getElementById('onionOpacity').addEventListener('input', (e) => {
+    this.onionOpacity = e.target.value / 100
+    document.documentElement.style.setProperty('--onion-opacity', this.onionOpacity)
+    this.updateCanvas()
+})
 
         document.querySelectorAll('.shape-btn').forEach(btn => {
             btn.addEventListener('click', () => {
@@ -181,6 +193,7 @@ document.getElementById('valSlider').addEventListener('input', this.updateHsvCol
         if (this.isDrawing) {
             this.isDrawing = false
             this.drawStartPos = null
+            this.previousFrameData = [...this.layers[this.activeLayer].data]
             this.saveState()
         }
     }
@@ -643,20 +656,28 @@ hsvToHex(h, s, v) {
     }
 
     updateCanvas() {
-        const pixels = this.canvas.children
-        for (let i = 0; i < pixels.length; i++) {
-            let finalColor = ''
-            this.layers.forEach(layer => {
-                if (layer.visible && layer.data[i]) {
-                    const color = layer.data[i]
-                    if (color) {
-                        finalColor = color
-                    }
+    const pixels = this.canvas.children
+    
+    for (let i = 0; i < pixels.length; i++) {
+        let finalColor = ''
+        this.layers.forEach(layer => {
+            if (layer.visible && layer.data[i]) {
+                const color = layer.data[i]
+                if (color) {
+                    finalColor = color
                 }
-            })
-            pixels[i].style.backgroundColor = finalColor || 'transparent'
+            }
+        })
+        
+        pixels[i].style.backgroundColor = finalColor || 'transparent'
+        pixels[i].classList.remove('onion-previous')
+        
+        if (this.onionSkinEnabled && this.previousFrameData && this.previousFrameData[i] && !finalColor) {
+            pixels[i].classList.add('onion-previous')
+            pixels[i].style.backgroundColor = this.previousFrameData[i]
         }
     }
+}
 
     addLayer() {
         const layer = {
