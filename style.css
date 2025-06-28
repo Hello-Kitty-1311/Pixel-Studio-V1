@@ -153,6 +153,35 @@ body {
     border: 1px solid #ddd;
 }
 
+.hsv-picker {
+    position: absolute;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 100;
+    top: 100%;
+    left: 0;
+}
+
+.hue-slider, .saturation-slider, .value-slider {
+    margin-bottom: 0.5rem;
+}
+
+.hue-slider input {
+    background: linear-gradient(to right, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);
+}
+
+#toggleHsv {
+    padding: 0.25rem 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #f8f9fa;
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
 .tools-sidebar {
     display: flex;
     flex-direction: column;
