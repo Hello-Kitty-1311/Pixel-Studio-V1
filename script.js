@@ -7,6 +7,8 @@ class PixelArtApp {
         this.symmetryMode = 'none'
         this.zoomLevel = 1
         this.gridVisible = true
+        this.animating = false
+        this.shortcutsVisible = false
         this.isDrawing = false
         this.drawStartPos = null
         this.opacity = 1
@@ -125,6 +127,20 @@ class PixelArtApp {
         document.getElementById('gridToggleBtn').addEventListener('click', () => {
             this.gridVisible = !this.gridVisible
             this.updateGrid()
+        })
+        document.getElementById('animateBtn').addEventListener('click', () => {
+            this.toggleAnimation()
+        })
+
+        document.addEventListener('keydown', (e) => {
+            this.handleKeyboardShortcuts(e)
+        })
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === '?' || e.key === '/') {
+                e.preventDefault()
+                this.toggleShortcuts()
+            }
         })
 
         document.getElementById('symmetryMode').addEventListener('change', (e) => {
@@ -319,6 +335,98 @@ class PixelArtApp {
             pixels[i].classList.remove('grid-visible', 'grid-hidden')
             pixels[i].classList.add(this.gridVisible ? 'grid-visible' : 'grid-hidden')
         }
+    }
+    toggleAnimation() {
+        this.animating = !this.animating
+        const container = document.querySelector('.canvas-container')
+        const btn = document.getElementById('animateBtn')
+        
+        if (this.animating) {
+            container.classList.add('animating')
+            btn.innerHTML = '<i class="fas fa-pause"></i>'
+        } else {
+            container.classList.remove('animating')
+            btn.innerHTML = '<i class="fas fa-play"></i>'
+        }
+    }
+
+    handleKeyboardShortcuts(e) {
+        if (e.ctrlKey || e.metaKey) {
+            switch (e.key) {
+                case 'z':
+                    e.preventDefault()
+                    if (e.shiftKey) {
+                        this.redo()
+                    } else {
+                        this.undo()
+                    }
+                    break
+                case 's':
+                    e.preventDefault()
+                    this.download()
+                    break
+            }
+        }
+
+        switch (e.key) {
+            case 'b':
+                e.preventDefault()
+                document.getElementById('pencilBtn').click()
+                break
+            case 'e':
+                e.preventDefault()
+                document.getElementById('eraserBtn').click()
+                break
+            case 'f':
+                e.preventDefault()
+                document.getElementById('fillBtn').click()
+                break
+            case 'i':
+                e.preventDefault()
+                document.getElementById('eyedropperBtn').click()
+                break
+            case 'c':
+                e.preventDefault()
+                this.clearCanvas()
+                break
+            case ' ':
+                e.preventDefault()
+                this.toggleAnimation()
+                break
+        }
+
+        if (e.key >= '1' && e.key <= '4') {
+            e.preventDefault()
+            this.brushSize = parseInt(e.key)
+            document.getElementById('brushSize').value = this.brushSize
+        }
+    }
+
+    toggleShortcuts() {
+        this.shortcutsVisible = !this.shortcutsVisible
+        let shortcutsDiv = document.querySelector('.keyboard-shortcuts')
+        
+        if (!shortcutsDiv) {
+            shortcutsDiv = document.createElement('div')
+            shortcutsDiv.className = 'keyboard-shortcuts'
+            shortcutsDiv.innerHTML = `
+                <strong>Keyboard Shortcuts:</strong><br>
+                B - Brush<br>
+                E - Eraser<br>
+                F - Fill<br>
+                I - Eyedropper<br>
+                C - Clear<br>
+                Space - Animate<br>
+                1-4 - Brush Size<br>
+                Ctrl+Z - Undo<br>
+                Ctrl+Shift+Z - Redo<br>
+                Ctrl+S - Download<br>
+                ? - Toggle Shortcuts
+            `
+            document.body.appendChild(shortcutsDiv)
+        }
+        
+        shortcutsDiv.classList.toggle('shortcuts-visible', this.shortcutsVisible)
     }
 
     fillArea(row, col) {
