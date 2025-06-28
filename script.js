@@ -37,14 +37,14 @@ class PixelArtApp {
     initializeCanvas() {
         this.canvas.style.gridTemplateColumns = `repeat(${this.gridSize}, 1fr)`
         this.canvas.innerHTML = ''
-
+        
         for (let i = 0; i < this.gridSize * this.gridSize; i++) {
             const pixel = document.createElement('div')
             pixel.className = 'pixel'
             pixel.dataset.index = i
             this.canvas.appendChild(pixel)
         }
-
+        
         this.updateGrid()
     }
 
@@ -65,13 +65,13 @@ class PixelArtApp {
             this.brushSize = parseInt(e.target.value)
         })
         document.getElementById('brushPattern').addEventListener('change', (e) => {
-            this.brushPattern = e.target.value
-        })
+    this.brushPattern = e.target.value
+})
 
-        document.getElementById('textureIntensity').addEventListener('input', (e) => {
-            this.textureIntensity = e.target.value / 100
-            document.documentElement.style.setProperty('--texture-intensity', this.textureIntensity)
-        })
+document.getElementById('textureIntensity').addEventListener('input', (e) => {
+    this.textureIntensity = e.target.value / 100
+    document.documentElement.style.setProperty('--texture-intensity', this.textureIntensity)
+})
 
         document.getElementById('canvasSize').addEventListener('change', (e) => {
             this.gridSize = parseInt(e.target.value)
@@ -80,13 +80,13 @@ class PixelArtApp {
             this.addLayer()
         })
         document.getElementById('toggleHsv').addEventListener('click', () => {
-            const hsvPicker = document.getElementById('hsvPicker')
-            hsvPicker.style.display = hsvPicker.style.display === 'none' ? 'block' : 'none'
-        })
+    const hsvPicker = document.getElementById('hsvPicker')
+    hsvPicker.style.display = hsvPicker.style.display === 'none' ? 'block' : 'none'
+})
 
-        document.getElementById('hueSlider').addEventListener('input', this.updateHsvColor.bind(this))
-        document.getElementById('satSlider').addEventListener('input', this.updateHsvColor.bind(this))
-        document.getElementById('valSlider').addEventListener('input', this.updateHsvColor.bind(this))
+document.getElementById('hueSlider').addEventListener('input', this.updateHsvColor.bind(this))
+document.getElementById('satSlider').addEventListener('input', this.updateHsvColor.bind(this))
+document.getElementById('valSlider').addEventListener('input', this.updateHsvColor.bind(this))
 
         document.querySelectorAll('.tool-btn').forEach(btn => {
             btn.addEventListener('click', () => {
@@ -95,7 +95,7 @@ class PixelArtApp {
                 this.currentTool = btn.id.replace('Btn', '')
             })
         })
-
+        
 
         document.getElementById('clearBtn').addEventListener('click', () => this.clearCanvas())
         document.getElementById('undoBtn').addEventListener('click', () => this.undo())
@@ -104,26 +104,26 @@ class PixelArtApp {
 
         document.querySelector('.add-layer-btn').addEventListener('click', () => this.addLayer())
         document.getElementById('onionSkinToggle').addEventListener('change', (e) => {
-            this.onionSkinEnabled = e.target.checked
-            this.updateCanvas()
-        })
-        document.getElementById('playBtn').addEventListener('click', () => this.togglePlayback())
-        document.getElementById('prevFrameBtn').addEventListener('click', () => this.previousFrame())
-        document.getElementById('nextFrameBtn').addEventListener('click', () => this.nextFrame())
-        document.getElementById('addFrameBtn').addEventListener('click', () => this.addFrame())
-        document.getElementById('fpsSlider').addEventListener('input', (e) => {
-            this.fps = parseInt(e.target.value)
-            if (this.isPlaying) {
-                this.stopPlayback()
-                this.startPlayback()
-            }
-        })
+    this.onionSkinEnabled = e.target.checked
+    this.updateCanvas()
+})
+document.getElementById('playBtn').addEventListener('click', () => this.togglePlayback())
+document.getElementById('prevFrameBtn').addEventListener('click', () => this.previousFrame())
+document.getElementById('nextFrameBtn').addEventListener('click', () => this.nextFrame())
+document.getElementById('addFrameBtn').addEventListener('click', () => this.addFrame())
+document.getElementById('fpsSlider').addEventListener('input', (e) => {
+    this.fps = parseInt(e.target.value)
+    if (this.isPlaying) {
+        this.stopPlayback()
+        this.startPlayback()
+    }
+})
 
-        document.getElementById('onionOpacity').addEventListener('input', (e) => {
-            this.onionOpacity = e.target.value / 100
-            document.documentElement.style.setProperty('--onion-opacity', this.onionOpacity)
-            this.updateCanvas()
-        })
+document.getElementById('onionOpacity').addEventListener('input', (e) => {
+    this.onionOpacity = e.target.value / 100
+    document.documentElement.style.setProperty('--onion-opacity', this.onionOpacity)
+    this.updateCanvas()
+})
 
         document.querySelectorAll('.shape-btn').forEach(btn => {
             btn.addEventListener('click', () => {
@@ -225,11 +225,10 @@ class PixelArtApp {
     }
 
     createDefaultPalette() {
-        const colors = ['#000000', '#FFFFFF', '#FF0000', '#00FF00', '#0000FF',
-            '#FFFF00', '#FF00FF', '#00FFFF', '#808080', '#FF9900'
-        ]
+        const colors = ['#000000', '#FFFFFF', '#FF0000', '#00FF00', '#0000FF', 
+                       '#FFFF00', '#FF00FF', '#00FFFF', '#808080', '#FF9900']
         const palette = document.querySelector('.color-palette')
-
+        
         colors.forEach(color => {
             const swatch = document.createElement('div')
             swatch.className = 'color-swatch'
@@ -243,119 +242,119 @@ class PixelArtApp {
     }
 
     updateHsvColor() {
-        const h = document.getElementById('hueSlider').value
-        const s = document.getElementById('satSlider').value / 100
-        const v = document.getElementById('valSlider').value / 100
+    const h = document.getElementById('hueSlider').value
+    const s = document.getElementById('satSlider').value / 100
+    const v = document.getElementById('valSlider').value / 100
+    
+    const hex = this.hsvToHex(h, s, v)
+    this.currentColor = hex
+    document.getElementById('colorPicker').value = hex
+}
 
-        const hex = this.hsvToHex(h, s, v)
-        this.currentColor = hex
-        document.getElementById('colorPicker').value = hex
-    }
-
-    hsvToHex(h, s, v) {
-        const c = v * s
-        const x = c * (1 - Math.abs((h / 60) % 2 - 1))
-        const m = v - c
-
-        let r, g, b
-        if (h < 60)[r, g, b] = [c, x, 0]
-        else if (h < 120)[r, g, b] = [x, c, 0]
-        else if (h < 180)[r, g, b] = [0, c, x]
-        else if (h < 240)[r, g, b] = [0, x, c]
-        else if (h < 300)[r, g, b] = [x, 0, c]
-        else [r, g, b] = [c, 0, x]
-
-        r = Math.round((r + m) * 255)
-        g = Math.round((g + m) * 255)
-        b = Math.round((b + m) * 255)
-
-        return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`
-    }
+hsvToHex(h, s, v) {
+    const c = v * s
+    const x = c * (1 - Math.abs((h / 60) % 2 - 1))
+    const m = v - c
+    
+    let r, g, b
+    if (h < 60) [r, g, b] = [c, x, 0]
+    else if (h < 120) [r, g, b] = [x, c, 0]
+    else if (h < 180) [r, g, b] = [0, c, x]
+    else if (h < 240) [r, g, b] = [0, x, c]
+    else if (h < 300) [r, g, b] = [x, 0, c]
+    else [r, g, b] = [c, 0, x]
+    
+    r = Math.round((r + m) * 255)
+    g = Math.round((g + m) * 255)
+    b = Math.round((b + m) * 255)
+    
+    return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`
+}
 
     drawPixel(row, col) {
         this.drawPixelAtPosition(row, col)
-
+        
         if (this.symmetryMode === 'horizontal' || this.symmetryMode === 'both') {
             const mirrorRow = this.gridSize - 1 - row
             this.drawPixelAtPosition(mirrorRow, col)
         }
-
+        
         if (this.symmetryMode === 'vertical' || this.symmetryMode === 'both') {
             const mirrorCol = this.gridSize - 1 - col
             this.drawPixelAtPosition(row, mirrorCol)
         }
-
+        
         if (this.symmetryMode === 'both') {
             const mirrorRow = this.gridSize - 1 - row
             const mirrorCol = this.gridSize - 1 - col
             this.drawPixelAtPosition(mirrorRow, mirrorCol)
         }
-
+        
         this.updateCanvas()
     }
 
     drawPixelAtPosition(row, col) {
-        const halfBrush = Math.floor(this.brushSize / 2)
-
-        for (let i = -halfBrush; i <= halfBrush; i++) {
-            for (let j = -halfBrush; j <= halfBrush; j++) {
-                const newRow = row + i
-                const newCol = col + j
-
-                if (this.brushSize === 1 ||
-                    (this.brushSize > 1 && Math.abs(i) + Math.abs(j) <= halfBrush)) {
-
-                    if (newRow >= 0 && newRow < this.gridSize && newCol >= 0 && newCol < this.gridSize) {
-                        const index = newRow * this.gridSize + newCol
-
-                        if (this.shouldDrawPixel(newRow, newCol)) {
-                            this.layers[this.activeLayer].data[index] = this.getPatternColor(newRow, newCol)
-                        }
+    const halfBrush = Math.floor(this.brushSize / 2)
+    
+    for (let i = -halfBrush; i <= halfBrush; i++) {
+        for (let j = -halfBrush; j <= halfBrush; j++) {
+            const newRow = row + i
+            const newCol = col + j
+            
+            if (this.brushSize === 1 || 
+                (this.brushSize > 1 && Math.abs(i) + Math.abs(j) <= halfBrush)) {
+                
+                if (newRow >= 0 && newRow < this.gridSize && newCol >= 0 && newCol < this.gridSize) {
+                    const index = newRow * this.gridSize + newCol
+                    
+                    if (this.shouldDrawPixel(newRow, newCol)) {
+                        this.layers[this.activeLayer].data[index] = this.getPatternColor(newRow, newCol)
                     }
                 }
             }
         }
     }
+}
 
-    shouldDrawPixel(row, col) {
-        switch (this.brushPattern) {
-            case 'dither':
-                return (row + col) % 2 === 0
-            case 'noise':
-                return Math.random() > 0.3
-            case 'crosshatch':
-                return (row % 3 === 0) || (col % 3 === 0)
-            default:
-                return true
+shouldDrawPixel(row, col) {
+    switch (this.brushPattern) {
+        case 'dither':
+            return (row + col) % 2 === 0
+        case 'noise':
+            return Math.random() > 0.3
+        case 'crosshatch':
+            return (row % 3 === 0) || (col % 3 === 0)
+        default:
+            return true
+    }
+}
+
+getPatternColor(row, col) {
+    if (this.brushPattern === 'noise' && this.textureIntensity > 0) {
+        const noise = Math.random() * this.textureIntensity
+        const color = this.hexToRgb(this.currentColor)
+        const adjusted = {
+            r: Math.max(0, Math.min(255, color.r + (noise - 0.5) * 100)),
+            g: Math.max(0, Math.min(255, color.g + (noise - 0.5) * 100)),
+            b: Math.max(0, Math.min(255, color.b + (noise - 0.5) * 100))
         }
+        return this.rgbToHex(adjusted.r, adjusted.g, adjusted.b)
     }
+    return this.currentColor
+}
 
-    getPatternColor(row, col) {
-        if (this.brushPattern === 'noise' && this.textureIntensity > 0) {
-            const noise = Math.random() * this.textureIntensity
-            const color = this.hexToRgb(this.currentColor)
-            const adjusted = {
-                r: Math.max(0, Math.min(255, color.r + (noise - 0.5) * 100)),
-                g: Math.max(0, Math.min(255, color.g + (noise - 0.5) * 100)),
-                b: Math.max(0, Math.min(255, color.b + (noise - 0.5) * 100))
-            }
-            return this.rgbToHex(adjusted.r, adjusted.g, adjusted.b)
-        }
-        return this.currentColor
-    }
+hexToRgb(hex) {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : null
+}
 
-    hexToRgb(hex) {
-        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
-        return result ? {
-            r: parseInt(result[1], 16),
-            g: parseInt(result[2], 16),
-            b: parseInt(result[3], 16)
-        } : null
-    }
-
-    rgbToHex(r, g, b) {
-        return `#${Math.round(r).toString(16).padStart(2, '0')}${Math.round(g).toString(16).padStart(2, '0')}${Math.round(b).toString(16).padStart(2, '0')}`
-    }
+rgbToHex(r, g, b) {
+    return `#${Math.round(r).toString(16).padStart(2, '0')}${Math.round(g).toString(16).padStart(2, '0')}${Math.round(b).toString(16).padStart(2, '0')}`
+}
 
     pickColor(index) {
         let pickedColor = ''
@@ -366,7 +365,7 @@ class PixelArtApp {
                 break
             }
         }
-
+        
         if (pickedColor) {
             this.currentColor = pickedColor
             document.getElementById('colorPicker').value = pickedColor
@@ -375,15 +374,15 @@ class PixelArtApp {
 
     drawPixel(row, col) {
         const halfBrush = Math.floor(this.brushSize / 2)
-
+        
         for (let i = -halfBrush; i <= halfBrush; i++) {
             for (let j = -halfBrush; j <= halfBrush; j++) {
                 const newRow = row + i
                 const newCol = col + j
-
-                if (this.brushSize === 1 ||
+                
+                if (this.brushSize === 1 || 
                     (this.brushSize > 1 && Math.abs(i) + Math.abs(j) <= halfBrush)) {
-
+                    
                     if (newRow >= 0 && newRow < this.gridSize && newCol >= 0 && newCol < this.gridSize) {
                         const index = newRow * this.gridSize + newCol
                         this.layers[this.activeLayer].data[index] = this.currentColor
@@ -396,37 +395,37 @@ class PixelArtApp {
 
     erasePixel(row, col) {
         this.erasePixelAtPosition(row, col)
-
+        
         if (this.symmetryMode === 'horizontal' || this.symmetryMode === 'both') {
             const mirrorRow = this.gridSize - 1 - row
             this.erasePixelAtPosition(mirrorRow, col)
         }
-
+        
         if (this.symmetryMode === 'vertical' || this.symmetryMode === 'both') {
             const mirrorCol = this.gridSize - 1 - col
             this.erasePixelAtPosition(row, mirrorCol)
         }
-
+        
         if (this.symmetryMode === 'both') {
             const mirrorRow = this.gridSize - 1 - row
             const mirrorCol = this.gridSize - 1 - col
             this.erasePixelAtPosition(mirrorRow, mirrorCol)
         }
-
+        
         this.updateCanvas()
     }
 
     erasePixelAtPosition(row, col) {
         const halfBrush = Math.floor(this.brushSize / 2)
-
+        
         for (let i = -halfBrush; i <= halfBrush; i++) {
             for (let j = -halfBrush; j <= halfBrush; j++) {
                 const newRow = row + i
                 const newCol = col + j
-
-                if (this.brushSize === 1 ||
+                
+                if (this.brushSize === 1 || 
                     (this.brushSize > 1 && Math.abs(i) + Math.abs(j) <= halfBrush)) {
-
+                    
                     if (newRow >= 0 && newRow < this.gridSize && newCol >= 0 && newCol < this.gridSize) {
                         const index = newRow * this.gridSize + newCol
                         this.layers[this.activeLayer].data[index] = ''
@@ -438,9 +437,9 @@ class PixelArtApp {
     updateZoom() {
         const canvas = document.getElementById('pixelCanvas')
         const container = document.querySelector('.canvas-container')
-
+        
         canvas.style.transform = `scale(${this.zoomLevel})`
-
+        
         if (this.zoomLevel > 1) {
             container.classList.add('zoomed')
             canvas.classList.add('zoomed')
@@ -461,7 +460,7 @@ class PixelArtApp {
         this.animating = !this.animating
         const container = document.querySelector('.canvas-container')
         const btn = document.getElementById('animateBtn')
-
+        
         if (this.animating) {
             container.classList.add('animating')
             btn.innerHTML = '<i class="fas fa-pause"></i>'
@@ -526,7 +525,7 @@ class PixelArtApp {
     toggleShortcuts() {
         this.shortcutsVisible = !this.shortcutsVisible
         let shortcutsDiv = document.querySelector('.keyboard-shortcuts')
-
+        
         if (!shortcutsDiv) {
             shortcutsDiv = document.createElement('div')
             shortcutsDiv.className = 'keyboard-shortcuts'
@@ -546,7 +545,7 @@ class PixelArtApp {
             `
             document.body.appendChild(shortcutsDiv)
         }
-
+        
         shortcutsDiv.classList.toggle('shortcuts-visible', this.shortcutsVisible)
     }
 
@@ -555,9 +554,7 @@ class PixelArtApp {
         const newColor = this.currentColor
         if (targetColor === newColor) return
 
-        const stack = [
-            [row, col]
-        ]
+        const stack = [[row, col]]
         const seen = new Set()
 
         while (stack.length > 0) {
@@ -658,7 +655,7 @@ class PixelArtApp {
 
     generatePattern(pattern) {
         this.saveState()
-
+        
         switch (pattern) {
             case 'checkerboard':
                 this.createCheckerboard()
@@ -728,138 +725,132 @@ class PixelArtApp {
     }
 
     updateCanvas() {
-        const pixels = this.canvas.children
-
-        for (let i = 0; i < pixels.length; i++) {
-            let finalColor = ''
-            this.layers.forEach(layer => {
-                if (layer.visible && layer.data[i]) {
-                    const color = layer.data[i]
-                    if (color) {
-                        finalColor = color
-                    }
+    const pixels = this.canvas.children
+    
+    for (let i = 0; i < pixels.length; i++) {
+        let finalColor = ''
+        this.layers.forEach(layer => {
+            if (layer.visible && layer.data[i]) {
+                const color = layer.data[i]
+                if (color) {
+                    finalColor = color
                 }
-            })
-
-            pixels[i].style.backgroundColor = finalColor || 'transparent'
-            pixels[i].classList.remove('onion-previous')
-
-            if (this.onionSkinEnabled && this.previousFrameData && this.previousFrameData[i] && !finalColor) {
-                pixels[i].classList.add('onion-previous')
-                pixels[i].style.backgroundColor = this.previousFrameData[i]
             }
+        })
+        
+        pixels[i].style.backgroundColor = finalColor || 'transparent'
+        pixels[i].classList.remove('onion-previous')
+        
+        if (this.onionSkinEnabled && this.previousFrameData && this.previousFrameData[i] && !finalColor) {
+            pixels[i].classList.add('onion-previous')
+            pixels[i].style.backgroundColor = this.previousFrameData[i]
         }
     }
+}
 
     addLayer() {
-        const layer = {
-            id: Date.now(),
-            visible: true,
-            opacity: 1,
-            data: new Array(this.gridSize * this.gridSize).fill('')
-        }
-
-        this.layers.push(layer)
-        this.activeLayer = this.layers.length - 1
-        this.createLayerUI(layer)
-
-        if (this.frames.length === 0) {
-            this.addFrame()
-        }
+    const layer = {
+        id: Date.now(),
+        visible: true,
+        opacity: 1,
+        data: new Array(this.gridSize * this.gridSize).fill('')
     }
-
-    addFrame() {
-        const frameData = this.layers.map(layer => ({
-            ...layer,
-            data: [...layer.data]
-        }))
-        this.frames.push(frameData)
-        this.currentFrame = this.frames.length - 1
-        this.updateFrameDisplay()
-        this.createFrameTimeline()
+    
+    this.layers.push(layer)
+    this.activeLayer = this.layers.length - 1
+    this.createLayerUI(layer)
+    
+    if (this.frames.length === 0) {
+        this.addFrame()
     }
+}
 
-    togglePlayback() {
-        if (this.isPlaying) {
-            this.stopPlayback()
-        } else {
-            this.startPlayback()
-        }
+addFrame() {
+    const frameData = this.layers.map(layer => ({...layer, data: [...layer.data]}))
+    this.frames.push(frameData)
+    this.currentFrame = this.frames.length - 1
+    this.updateFrameDisplay()
+    this.createFrameTimeline()
+}
+
+togglePlayback() {
+    if (this.isPlaying) {
+        this.stopPlayback()
+    } else {
+        this.startPlayback()
     }
+}
 
-    startPlayback() {
-        if (this.frames.length < 2) return
-
-        this.isPlaying = true
-        document.getElementById('playBtn').innerHTML = '<i class="fas fa-pause"></i>'
-
-        this.animationInterval = setInterval(() => {
-            this.currentFrame = (this.currentFrame + 1) % this.frames.length
-            this.loadFrame(this.currentFrame)
-            this.updateFrameDisplay()
-        }, 1000 / this.fps)
-    }
-
-    stopPlayback() {
-        this.isPlaying = false
-        document.getElementById('playBtn').innerHTML = '<i class="fas fa-play"></i>'
-        if (this.animationInterval) {
-            clearInterval(this.animationInterval)
-            this.animationInterval = null
-        }
-    }
-
-    previousFrame() {
-        if (this.frames.length === 0) return
-        this.currentFrame = (this.currentFrame - 1 + this.frames.length) % this.frames.length
-        this.loadFrame(this.currentFrame)
-        this.updateFrameDisplay()
-    }
-
-    nextFrame() {
-        if (this.frames.length === 0) return
+startPlayback() {
+    if (this.frames.length < 2) return
+    
+    this.isPlaying = true
+    document.getElementById('playBtn').innerHTML = '<i class="fas fa-pause"></i>'
+    
+    this.animationInterval = setInterval(() => {
         this.currentFrame = (this.currentFrame + 1) % this.frames.length
         this.loadFrame(this.currentFrame)
         this.updateFrameDisplay()
+    }, 1000 / this.fps)
+}
+
+stopPlayback() {
+    this.isPlaying = false
+    document.getElementById('playBtn').innerHTML = '<i class="fas fa-play"></i>'
+    if (this.animationInterval) {
+        clearInterval(this.animationInterval)
+        this.animationInterval = null
     }
+}
 
-    loadFrame(frameIndex) {
-        if (frameIndex >= 0 && frameIndex < this.frames.length) {
-            this.layers = this.frames[frameIndex].map(layer => ({
-                ...layer,
-                data: [...layer.data]
-            }))
-            this.updateCanvas()
-            this.updateLayerUI()
-        }
+previousFrame() {
+    if (this.frames.length === 0) return
+    this.currentFrame = (this.currentFrame - 1 + this.frames.length) % this.frames.length
+    this.loadFrame(this.currentFrame)
+    this.updateFrameDisplay()
+}
+
+nextFrame() {
+    if (this.frames.length === 0) return
+    this.currentFrame = (this.currentFrame + 1) % this.frames.length
+    this.loadFrame(this.currentFrame)
+    this.updateFrameDisplay()
+}
+
+loadFrame(frameIndex) {
+    if (frameIndex >= 0 && frameIndex < this.frames.length) {
+        this.layers = this.frames[frameIndex].map(layer => ({...layer, data: [...layer.data]}))
+        this.updateCanvas()
+        this.updateLayerUI()
     }
+}
 
-    updateFrameDisplay() {
-        document.getElementById('currentFrame').textContent = this.currentFrame + 1
-        document.getElementById('totalFrames').textContent = this.frames.length
+updateFrameDisplay() {
+    document.getElementById('currentFrame').textContent = this.currentFrame + 1
+    document.getElementById('totalFrames').textContent = this.frames.length
+}
+
+createFrameTimeline() {
+    let timeline = document.querySelector('.frame-timeline')
+    if (!timeline) {
+        timeline = document.createElement('div')
+        timeline.className = 'frame-timeline'
+        document.querySelector('.animation-controls').appendChild(timeline)
     }
-
-    createFrameTimeline() {
-        let timeline = document.querySelector('.frame-timeline')
-        if (!timeline) {
-            timeline = document.createElement('div')
-            timeline.className = 'frame-timeline'
-            document.querySelector('.animation-controls').appendChild(timeline)
-        }
-
-        timeline.innerHTML = ''
-        this.frames.forEach((frame, index) => {
-            const thumb = document.createElement('div')
-            thumb.className = `frame-thumb ${index === this.currentFrame ? 'active' : ''}`
-            thumb.addEventListener('click', () => {
-                this.currentFrame = index
-                this.loadFrame(index)
-                this.updateFrameDisplay()
-                this.createFrameTimeline()
-            })
-            timeline.appendChild(thumb)
+    
+    timeline.innerHTML = ''
+    this.frames.forEach((frame, index) => {
+        const thumb = document.createElement('div')
+        thumb.className = `frame-thumb ${index === this.currentFrame ? 'active' : ''}`
+        thumb.addEventListener('click', () => {
+            this.currentFrame = index
+            this.loadFrame(index)
+            this.updateFrameDisplay()
+            this.createFrameTimeline()
         })
-    }
+        timeline.appendChild(thumb)
+    })
+}
 
     createLayerUI(layer) {
         const layersList = document.querySelector('.layers-list')
@@ -870,30 +861,30 @@ class PixelArtApp {
             <input type="range" value="${layer.opacity * 100}" min="0" max="100">
             <button class="layer-delete">&times;</button>
         `
-
+        
         layerElement.querySelector('input[type="checkbox"]').addEventListener('change', (e) => {
             layer.visible = e.target.checked
             this.updateCanvas()
         })
-
+        
         layerElement.querySelector('input[type="range"]').addEventListener('input', (e) => {
             layer.opacity = e.target.value / 100
             this.updateCanvas()
         })
-
+        
         layerElement.querySelector('.layer-delete').addEventListener('click', () => {
             if (this.layers.length > 1) {
                 this.deleteLayer(layer.id)
             }
         })
-
+        
         layerElement.addEventListener('click', (e) => {
             if (!e.target.matches('input, button')) {
                 this.activeLayer = this.layers.findIndex(l => l.id === layer.id)
                 this.updateLayerSelection()
             }
         })
-
+        
         layersList.appendChild(layerElement)
         this.updateLayerSelection()
     }
@@ -937,7 +928,7 @@ class PixelArtApp {
                 data: [...layer.data]
             }))
             this.redoStack.push(currentState)
-
+            
             const previousState = this.undoStack.pop()
             this.layers = previousState
             this.updateCanvas()
@@ -952,7 +943,7 @@ class PixelArtApp {
                 data: [...layer.data]
             }))
             this.undoStack.push(currentState)
-
+            
             const nextState = this.redoStack.pop()
             this.layers = nextState
             this.updateCanvas()
@@ -965,7 +956,7 @@ class PixelArtApp {
         canvas.width = this.gridSize
         canvas.height = this.gridSize
         const ctx = canvas.getContext('2d')
-
+        
         this.layers.forEach(layer => {
             if (layer.visible) {
                 layer.data.forEach((color, i) => {
@@ -979,7 +970,7 @@ class PixelArtApp {
                 })
             }
         })
-
+        
         const link = document.createElement('a')
         link.download = 'pixel-art.png'
         link.href = canvas.toDataURL()
