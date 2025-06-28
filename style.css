@@ -257,9 +257,17 @@ body {
 }
 
 @keyframes brushPreview {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-    100% { transform: scale(1); }
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
 }
 
 .texture-overlay {
@@ -285,9 +293,50 @@ body {
     transform-origin: top left;
 }
 
-.action-buttons {
+.animation-controls {
     display: flex;
     gap: 0.5rem;
+    align-items: center;
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.frame-counter {
+    background: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    font-weight: bold;
+    min-width: 60px;
+    text-align: center;
+}
+
+.frame-timeline {
+    display: flex;
+    gap: 0.25rem;
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: white;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    overflow-x: auto;
+    max-width: 100%;
+}
+
+.frame-thumb {
+    width: 40px;
+    height: 40px;
+    border: 2px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    flex-shrink: 0;
+    background: #f8f9fa;
+}
+
+.frame-thumb.active {
+    border-color: #007bff;
 }
 
 .action-btn {
