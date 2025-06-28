@@ -3,85 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#2e0259">
     <title>Pixel Verse Studio</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="cosmic-theme">
+    <div class="theme-switcher">
+        <button class="theme-btn cosmic active" data-theme="cosmic">
+            <i class="fas fa-moon"></i>
+        </button>
+        <button class="theme-btn forest" data-theme="forest">
+            <i class="fas fa-leaf"></i>
+        </button>
+        <button class="theme-btn ocean" data-theme="ocean">
+            <i class="fas fa-water"></i>
+        </button>
+        <button class="theme-btn sunset" data-theme="sunset">
+            <i class="fas fa-sun"></i>
+        </button>
+    </div>
+
     <div class="container">
         <header class="app-header">
             <h1 class="title-animated">Pixel Verse Studio</h1>
             <div class="toolbar">
                 <div class="tool-group">
                     <div class="color-picker-wrapper">
-                        <input type="color" id="colorPicker" value="#000000">
-                        <label for="colorPicker">Color</label>
+                        <input type="color" id="colorPicker" value="#FF69B4">
+                        <label for="colorPicker" class="picker-label">Color</label>
                     </div>
                     <div class="color-palette"></div>
                 </div>
                 
                 <div class="tool-group">
                     <input type="range" id="opacitySlider" min="0" max="100" value="100">
-                    <label for="opacitySlider">Opacity</label>
+                    <label for="opacitySlider" class="slider-label">Opacity</label>
                 </div>
 
                 <div class="tool-group">
                     <input type="range" id="brushSize" min="1" max="4" value="1">
-                    <label for="brushSize">Size</label>
+                    <label for="brushSize" class="slider-label">Size</label>
                 </div>
 
                 <div class="tool-group">
-                    <select id="canvasSize">
+                    <select id="canvasSize" class="canvas-select">
                         <option value="16">16x16</option>
-                        <option value="32" selected>32x32</option>
+                        <option value="32">32x32</option>
                         <option value="64">64x64</option>
                     </select>
-                </div>
-                <div class="tool-group">
-                    <select id="symmetryMode">
-                        <option value="none">No Symmetry</option>
-                        <option value="horizontal">Horizontal</option>
-                        <option value="vertical">Vertical</option>
-                        <option value="both">Both</option>
-                    </select>
-                    <label for="symmetryMode">Symmetry</label>
-                </div>
-                <div class="tool-group">
-                    <input type="range" id="zoomSlider" min="1" max="5" value="1" step="0.5">
-                    <label for="zoomSlider">Zoom</label>
-                </div>
-
-                <div class="tool-group">
-                    <button class="action-btn" id="gridToggleBtn">
-                        <i class="fas fa-border-all"></i>
-                    </button>
-                    <label for="gridToggleBtn">Grid</label>
                 </div>
             </div>
         </header>
 
         <main class="workspace">
             <div class="tools-sidebar">
-                <button class="tool-btn active" id="pencilBtn">
+                <button class="tool-btn active" id="pencilBtn" title="Pencil">
                     <i class="fas fa-pencil-alt"></i>
                 </button>
-                <button class="tool-btn" id="eraserBtn">
+                <button class="tool-btn" id="eraserBtn" title="Eraser">
                     <i class="fas fa-eraser"></i>
                 </button>
-                <button class="tool-btn" id="fillBtn">
+                <button class="tool-btn" id="fillBtn" title="Fill">
                     <i class="fas fa-fill-drip"></i>
                 </button>
-                <button class="tool-btn" id="shapesBtn">
+                <button class="tool-btn" id="shapesBtn" title="Shapes">
                     <i class="fas fa-shapes"></i>
                 </button>
-                <button class="tool-btn" id="patternsBtn">
-                    <i class="fas fa-th"></i>
-                </button>
-                <button class="tool-btn" id="eyedropperBtn">
-                    <i class="fas fa-eye-dropper"></i>
-                </button>
-                <button class="tool-btn" id="symmetryBtn">
-                    <i class="fas fa-adjust"></i>
+                <button class="tool-btn" id="patternBtn" title="Patterns">
+                    <i class="fas fa-chess-board"></i>
                 </button>
             </div>
 
@@ -100,11 +90,11 @@
                     <button class="action-btn" id="clearBtn">
                         <i class="fas fa-trash-alt"></i>
                     </button>
+                    <button class="action-btn" id="gridToggle">
+                        <i class="fas fa-border-all"></i>
+                    </button>
                     <button class="action-btn" id="downloadBtn">
                         <i class="fas fa-download"></i>
-                    </button>
-                    <button class="action-btn" id="animateBtn">
-                        <i class="fas fa-play"></i>
                     </button>
                 </div>
             </div>
@@ -117,12 +107,12 @@
                 </button>
             </div>
         </main>
-        
+
         <div class="modal shapes-modal" id="shapesModal">
             <div class="modal-content">
                 <div class="modal-header">
                     <h3>Select Shape</h3>
-                    <button class="close-modal">×</button>
+                    <button class="close-modal">&times;</button>
                 </div>
                 <div class="shapes-container">
                     <button class="shape-btn" data-shape="rectangle">
@@ -145,24 +135,24 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h3>Select Pattern</h3>
-                    <button class="close-modal">×</button>
+                    <button class="close-modal">&times;</button>
                 </div>
                 <div class="patterns-container">
                     <button class="pattern-btn" data-pattern="checkerboard">
-                        <div class="pattern-preview checkerboard-preview"></div>
+                        <i class="fas fa-chess-board"></i>
                         <span>Checkerboard</span>
                     </button>
                     <button class="pattern-btn" data-pattern="stripes">
-                        <div class="pattern-preview stripes-preview"></div>
+                        <i class="fas fa-grip-lines"></i>
                         <span>Stripes</span>
                     </button>
                     <button class="pattern-btn" data-pattern="dots">
-                        <div class="pattern-preview dots-preview"></div>
+                        <i class="fas fa-dot-circle"></i>
                         <span>Dots</span>
                     </button>
-                    <button class="pattern-btn" data-pattern="grid">
-                        <div class="pattern-preview grid-preview"></div>
-                        <span>Grid</span>
+                    <button class="pattern-btn" data-pattern="gradient">
+                        <i class="fas fa-gradient"></i>
+                        <span>Gradient</span>
                     </button>
                 </div>
             </div>
