@@ -9,6 +9,8 @@ body {
     min-height: 100vh;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: #333;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 .container {
@@ -26,7 +28,7 @@ body {
     font-size: 3rem;
     font-weight: bold;
     color: white;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
     margin-bottom: 1rem;
 }
 
@@ -37,17 +39,19 @@ body {
     background: rgba(255, 255, 255, 0.95);
     border-radius: 15px;
     padding: 1rem;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
 }
 
 .toolbar {
     display: flex;
     justify-content: center;
+    align-items: flex-end;
     gap: 2rem;
     margin-bottom: 1rem;
     padding: 1rem;
     background: rgba(255, 255, 255, 0.8);
     border-radius: 10px;
+    flex-wrap: wrap;
 }
 
 .tool-group {
@@ -55,6 +59,8 @@ body {
     flex-direction: column;
     align-items: center;
     gap: 0.5rem;
+    color: #555;
+    font-size: 0.8rem;
 }
 
 .patterns-container {
@@ -89,34 +95,19 @@ body {
 }
 
 .checkerboard-preview {
-    background:
-        linear-gradient(45deg, #000 25%, transparent 25%),
-        linear-gradient(-45deg, #000 25%, transparent 25%),
-        linear-gradient(45deg, transparent 75%, #000 75%),
-        linear-gradient(-45deg, transparent 75%, #000 75%);
+    background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
     background-size: 10px 10px;
     background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
 }
-
 .stripes-preview {
-    background: repeating-linear-gradient(45deg,
-            #000,
-            #000 2px,
-            transparent 2px,
-            transparent 8px);
+    background: repeating-linear-gradient(45deg, #ccc, #ccc 2px, white 2px, white 8px);
 }
-
 .dots-preview {
-    background:
-        radial-gradient(circle at 25% 25%, #000 2px, transparent 2px),
-        radial-gradient(circle at 75% 75%, #000 2px, transparent 2px);
+    background-image: radial-gradient(#ccc 20%, transparent 20%);
     background-size: 10px 10px;
 }
-
 .grid-preview {
-    background:
-        linear-gradient(#000 1px, transparent 1px),
-        linear-gradient(90deg, #000 1px, transparent 1px);
+    background-image: linear-gradient(#ccc 1px, transparent 1px), linear-gradient(90deg, #ccc 1px, transparent 1px);
     background-size: 8px 8px;
 }
 
@@ -133,14 +124,14 @@ body {
     border: none;
     border-radius: 8px;
     cursor: pointer;
+    background-color: transparent;
 }
 
 .color-palette {
-    display: flex;
-    gap: 0.25rem;
-    flex-wrap: wrap;
-    justify-content: center;
-    max-width: 200px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 4px;
+    margin-top: 0.5rem;
 }
 
 .color-swatch {
@@ -149,37 +140,10 @@ body {
     border-radius: 4px;
     cursor: pointer;
     border: 1px solid #ddd;
+    transition: transform 0.1s ease;
 }
-
-.hsv-picker {
-    position: absolute;
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 1rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    z-index: 100;
-    top: 100%;
-    left: 0;
-}
-
-.hue-slider,
-.saturation-slider,
-.value-slider {
-    margin-bottom: 0.5rem;
-}
-
-.hue-slider input {
-    background: linear-gradient(to right, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);
-}
-
-#toggleHsv {
-    padding: 0.25rem 0.5rem;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    background: #f8f9fa;
-    cursor: pointer;
-    font-size: 0.8rem;
+.color-swatch:hover {
+    transform: scale(1.1);
 }
 
 .tools-sidebar {
@@ -201,7 +165,7 @@ body {
     font-size: 1.2rem;
     cursor: pointer;
     transition: all 0.2s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .tool-btn:hover {
@@ -212,7 +176,7 @@ body {
 .tool-btn.active {
     background: #007bff;
     color: white;
-    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+    box-shadow: 0 4px 8px rgba(0,123,255,0.3);
 }
 
 .canvas-workspace {
@@ -223,112 +187,44 @@ body {
 }
 
 .canvas-container {
-    width: 500px;
-    height: 500px;
-    background: white;
+    width: 512px;
+    height: 512px;
+    background-color: #f0f0f0;
+    background-image: linear-gradient(45deg, #e0e0e0 25%, transparent 25%), linear-gradient(-45deg, #e0e0e0 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #e0e0e0 75%), linear-gradient(-45deg, transparent 75%, #e0e0e0 75%);
+    background-size: 20px 20px;
     border: 2px solid #ddd;
     border-radius: 8px;
     overflow: hidden;
+    image-rendering: pixelated;
 }
 
 .pixel-canvas {
     width: 100%;
     height: 100%;
     display: grid;
-    background: white;
+    background: transparent;
+    transition: transform 0.2s ease;
 }
 
 .pixel {
-    border: 1px solid #eee;
-    transition: background-color 0.1s ease;
+    border: 1px solid rgba(0,0,0,0);
 }
 
-.pixel.grid-visible {
-    border: 1px solid #ddd;
-}
-
-.pixel.grid-hidden {
-    border: 1px solid transparent;
-}
-
-.pixel.brush-preview {
-    box-shadow: inset 0 0 0 2px rgba(0, 123, 255, 0.5);
-    animation: brushPreview 0.3s ease-in-out;
-}
-
-@keyframes brushPreview {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-    100% { transform: scale(1); }
-}
-
-.texture-overlay {
-    position: relative;
-}
-
-.texture-overlay::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    opacity: var(--texture-intensity, 0.5);
-    pointer-events: none;
+.pixel-canvas:not(.grid-hidden) .pixel {
+    box-shadow: inset 0 0 0 1px #eee;
 }
 
 .canvas-container.zoomed {
     overflow: auto;
 }
 
-.pixel-canvas.zoomed {
+.pixel-canvas {
     transform-origin: top left;
 }
 
-.animation-controls {
+.action-buttons {
     display: flex;
     gap: 0.5rem;
-    align-items: center;
-    background: #f8f9fa;
-    padding: 1rem;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-}
-
-.frame-counter {
-    background: white;
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-    border: 1px solid #ddd;
-    font-weight: bold;
-    min-width: 60px;
-    text-align: center;
-}
-
-.frame-timeline {
-    display: flex;
-    gap: 0.25rem;
-    margin-top: 0.5rem;
-    padding: 0.5rem;
-    background: white;
-    border-radius: 6px;
-    border: 1px solid #ddd;
-    overflow-x: auto;
-    max-width: 100%;
-}
-
-.frame-thumb {
-    width: 40px;
-    height: 40px;
-    border: 2px solid transparent;
-    border-radius: 4px;
-    cursor: pointer;
-    flex-shrink: 0;
-    background: #f8f9fa;
-}
-
-.frame-thumb.active {
-    border-color: #007bff;
 }
 
 .action-btn {
@@ -347,62 +243,51 @@ body {
 }
 
 .layers-panel {
-    width: 200px;
+    width: 220px;
     background: #f8f9fa;
     border-radius: 10px;
     padding: 1rem;
-}
-
-.onion-skin-controls {
-    margin-bottom: 1rem;
-    padding: 0.5rem;
-    background: white;
-    border-radius: 6px;
-    border: 1px solid #ddd;
-}
-
-.onion-skin-controls label {
     display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.5rem;
-    font-size: 0.9rem;
-}
-
-.pixel.onion-previous {
-    position: relative;
-}
-
-.pixel.onion-previous::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: inherit;
-    opacity: var(--onion-opacity, 0.3);
-    pointer-events: none;
+    flex-direction: column;
 }
 
 .layers-list {
-    min-height: 150px;
+    flex-grow: 1;
     margin: 1rem 0;
-    background: white;
     border-radius: 8px;
     padding: 0.5rem;
     border: 1px solid #ddd;
+    overflow-y: auto;
 }
 
 .layer-item {
-    background: #f8f9fa;
+    background: #fff;
     margin-bottom: 0.5rem;
     padding: 0.5rem;
     border-radius: 6px;
     display: flex;
     gap: 0.5rem;
     align-items: center;
-    border: 1px solid #dee2e6;
+    border: 2px solid #dee2e6;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+.layer-item.active {
+    border-color: #007bff;
+}
+.layer-item span {
+    flex-grow: 1;
+}
+.layer-item .visibility-toggle, .layer-item .layer-delete {
+    color: #6c757d;
+    cursor: pointer;
+    border: none;
+    background: none;
+    font-size: 1rem;
+    padding: 0.2rem;
+}
+.layer-item .visibility-toggle:hover, .layer-item .layer-delete:hover {
+    color: #343a40;
 }
 
 .add-layer-btn {
@@ -442,7 +327,7 @@ body {
     padding: 2rem;
     max-width: 400px;
     width: 90%;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
 }
 
 .modal-header {
@@ -499,65 +384,72 @@ select {
     background: white;
 }
 
-@media (max-width: 768px) {
-    .workspace {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto auto 1fr;
-    }
-
-    .tools-sidebar {
-        flex-direction: row;
-        justify-content: center;
-        order: 1;
-    }
-
-    .canvas-workspace {
-        order: 2;
-    }
-
-    .layers-panel {
-        width: 100%;
-        order: 3;
-    }
-
-    .canvas-container {
-        width: 300px;
-        height: 300px;
-    }
-
-    .toolbar {
-        flex-wrap: wrap;
-        gap: 1rem;
-    }
-}
-
 .keyboard-shortcuts {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0,0,0,0.8);
     color: white;
     padding: 1rem;
     border-radius: 8px;
     font-size: 0.8rem;
-    max-width: 200px;
+    line-height: 1.5;
+    max-width: 250px;
     display: none;
+    z-index: 2000;
 }
 
 .shortcuts-visible {
     display: block;
 }
 
-.canvas-container.animating {
+.canvas-container.animating .pixel-canvas {
     animation: pixelPulse 0.5s ease-in-out infinite alternate;
 }
 
 @keyframes pixelPulse {
-    0% {
-        transform: scale(1);
-    }
+    0% { transform: scale(1) rotate(0deg); }
+    100% { transform: scale(1.05) rotate(1deg); }
+}
 
-    100% {
-        transform: scale(1.05);
+@media (max-width: 1200px) {
+    .workspace {
+        grid-template-columns: auto 1fr;
+        grid-template-areas: 
+            "sidebar canvas"
+            "sidebar layers";
+    }
+    .layers-panel { width: auto; }
+}
+
+@media (max-width: 768px) {
+    .workspace {
+        grid-template-columns: 1fr;
+        grid-template-areas: 
+            "sidebar"
+            "canvas"
+            "layers";
+    }
+    
+    .tools-sidebar {
+        flex-direction: row;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    .canvas-container {
+        width: 100%;
+        padding-top: 100%; /* Aspect ratio 1:1 */
+        height: 0;
+        position: relative;
+    }
+    .pixel-canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+    }
+    .toolbar {
+        gap: 1rem;
     }
 }
