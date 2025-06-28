@@ -63,6 +63,14 @@ class PixelArtApp {
             this.layers = []
             this.addLayer()
         })
+        document.getElementById('toggleHsv').addEventListener('click', () => {
+    const hsvPicker = document.getElementById('hsvPicker')
+    hsvPicker.style.display = hsvPicker.style.display === 'none' ? 'block' : 'none'
+})
+
+document.getElementById('hueSlider').addEventListener('input', this.updateHsvColor.bind(this))
+document.getElementById('satSlider').addEventListener('input', this.updateHsvColor.bind(this))
+document.getElementById('valSlider').addEventListener('input', this.updateHsvColor.bind(this))
 
         document.querySelectorAll('.tool-btn').forEach(btn => {
             btn.addEventListener('click', () => {
@@ -193,6 +201,36 @@ class PixelArtApp {
             palette.appendChild(swatch)
         })
     }
+
+    updateHsvColor() {
+    const h = document.getElementById('hueSlider').value
+    const s = document.getElementById('satSlider').value / 100
+    const v = document.getElementById('valSlider').value / 100
+    
+    const hex = this.hsvToHex(h, s, v)
+    this.currentColor = hex
+    document.getElementById('colorPicker').value = hex
+}
+
+hsvToHex(h, s, v) {
+    const c = v * s
+    const x = c * (1 - Math.abs((h / 60) % 2 - 1))
+    const m = v - c
+    
+    let r, g, b
+    if (h < 60) [r, g, b] = [c, x, 0]
+    else if (h < 120) [r, g, b] = [x, c, 0]
+    else if (h < 180) [r, g, b] = [0, c, x]
+    else if (h < 240) [r, g, b] = [0, x, c]
+    else if (h < 300) [r, g, b] = [x, 0, c]
+    else [r, g, b] = [c, 0, x]
+    
+    r = Math.round((r + m) * 255)
+    g = Math.round((g + m) * 255)
+    b = Math.round((b + m) * 255)
+    
+    return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`
+}
 
     drawPixel(row, col) {
         this.drawPixelAtPosition(row, col)
