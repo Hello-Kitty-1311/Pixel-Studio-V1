@@ -21,7 +21,8 @@ class PixelArtApp {
         this.onionOpacity = 0.3
         this.previousFrameData = null
         this.canvas = document.getElementById('pixelCanvas')
-        
+        this.brushPattern = 'solid'
+        this.textureIntensity = 0.5
         this.initializeCanvas()
         this.addLayer()
         this.setupEventListeners()
@@ -58,6 +59,14 @@ class PixelArtApp {
         document.getElementById('brushSize').addEventListener('input', (e) => {
             this.brushSize = parseInt(e.target.value)
         })
+        document.getElementById('brushPattern').addEventListener('change', (e) => {
+    this.brushPattern = e.target.value
+})
+
+document.getElementById('textureIntensity').addEventListener('input', (e) => {
+    this.textureIntensity = e.target.value / 100
+    document.documentElement.style.setProperty('--texture-intensity', this.textureIntensity)
+})
 
         document.getElementById('canvasSize').addEventListener('change', (e) => {
             this.gridSize = parseInt(e.target.value)
@@ -268,24 +277,67 @@ hsvToHex(h, s, v) {
     }
 
     drawPixelAtPosition(row, col) {
-        const halfBrush = Math.floor(this.brushSize / 2)
-        
-        for (let i = -halfBrush; i <= halfBrush; i++) {
-            for (let j = -halfBrush; j <= halfBrush; j++) {
-                const newRow = row + i
-                const newCol = col + j
+    const halfBrush = Math.floor(this.brushSize / 2)
+    
+    for (let i = -halfBrush; i <= halfBrush; i++) {
+        for (let j = -halfBrush; j <= halfBrush; j++) {
+            const newRow = row + i
+            const newCol = col + j
+            
+            if (this.brushSize === 1 || 
+                (this.brushSize > 1 && Math.abs(i) + Math.abs(j) <= halfBrush)) {
                 
-                if (this.brushSize === 1 || 
-                    (this.brushSize > 1 && Math.abs(i) + Math.abs(j) <= halfBrush)) {
+                if (newRow >= 0 && newRow < this.gridSize && newCol >= 0 && newCol < this.gridSize) {
+                    const index = newRow * this.gridSize + newCol
                     
-                    if (newRow >= 0 && newRow < this.gridSize && newCol >= 0 && newCol < this.gridSize) {
-                        const index = newRow * this.gridSize + newCol
-                        this.layers[this.activeLayer].data[index] = this.currentColor
+                    if (this.shouldDrawPixel(newRow, newCol)) {
+                        this.layers[this.activeLayer].data[index] = this.getPatternColor(newRow, newCol)
                     }
                 }
             }
         }
     }
+}
+
+shouldDrawPixel(row, col) {
+    switch (this.brushPattern) {
+        case 'dither':
+            return (row + col) % 2 === 0
+        case 'noise':
+            return Math.random() > 0.3
+        case 'crosshatch':
+            return (row % 3 === 0) || (col % 3 === 0)
+        default:
+            return true
+    }
+}
+
+getPatternColor(row, col) {
+    if (this.brushPattern === 'noise' && this.textureIntensity > 0) {
+        const noise = Math.random() * this.textureIntensity
+        const color = this.hexToRgb(this.currentColor)
+        const adjusted = {
+            r: Math.max(0, Math.min(255, color.r + (noise - 0.5) * 100)),
+            g: Math.max(0, Math.min(255, color.g + (noise - 0.5) * 100)),
+            b: Math.max(0, Math.min(255, color.b + (noise - 0.5) * 100))
+        }
+        return this.rgbToHex(adjusted.r, adjusted.g, adjusted.b)
+    }
+    return this.currentColor
+}
+
+hexToRgb(hex) {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : null
+}
+
+rgbToHex(r, g, b) {
+    return `#${Math.round(r).toString(16).padStart(2, '0')}${Math.round(g).toString(16).padStart(2, '0')}${Math.round(b).toString(16).padStart(2, '0')}`
+}
 
     pickColor(index) {
         let pickedColor = ''

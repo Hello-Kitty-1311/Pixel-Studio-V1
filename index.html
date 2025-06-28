@@ -45,6 +45,15 @@
                         <input type="range" id="brushSize" min="1" max="4" value="1">
                         <label for="brushSize">Size</label>
                     </div>
+                    <div class="tool-group">
+                        <select id="brushPattern">
+                            <option value="solid">Solid</option>
+                            <option value="dither">Dither</option>
+                            <option value="noise">Noise</option>
+                            <option value="crosshatch">Cross Hatch</option>
+                        </select>
+                        <label for="brushPattern">Pattern</label>
+                    </div>
 
                     <div class="tool-group">
                         <select id="canvasSize">
@@ -66,7 +75,10 @@
                         <input type="range" id="zoomSlider" min="1" max="5" value="1" step="0.5">
                         <label for="zoomSlider">Zoom</label>
                     </div>
-
+                    <div class="tool-group">
+                        <input type="range" id="textureIntensity" min="0" max="100" value="50">
+                        <label for="textureIntensity">Texture</label>
+                    </div>
                     <div class="tool-group">
                         <button class="action-btn" id="gridToggleBtn">
                             <i class="fas fa-border-all"></i>
