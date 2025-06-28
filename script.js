@@ -5,6 +5,8 @@ class PixelArtApp {
         this.currentTool = 'pencil'
         this.eyedropperActive = false
         this.symmetryMode = 'none'
+        this.zoomLevel = 1
+        this.gridVisible = true
         this.isDrawing = false
         this.drawStartPos = null
         this.opacity = 1
@@ -32,6 +34,8 @@ class PixelArtApp {
             pixel.dataset.index = i
             this.canvas.appendChild(pixel)
         }
+        
+        this.updateGrid()
     }
 
     setupEventListeners() {
@@ -112,6 +116,15 @@ class PixelArtApp {
             const nextIndex = (currentIndex + 1) % modes.length
             this.symmetryMode = modes[nextIndex]
             symmetrySelect.value = this.symmetryMode
+        })
+        document.getElementById('zoomSlider').addEventListener('input', (e) => {
+            this.zoomLevel = parseFloat(e.target.value)
+            this.updateZoom()
+        })
+
+        document.getElementById('gridToggleBtn').addEventListener('click', () => {
+            this.gridVisible = !this.gridVisible
+            this.updateGrid()
         })
 
         document.getElementById('symmetryMode').addEventListener('change', (e) => {
@@ -283,6 +296,28 @@ class PixelArtApp {
                     }
                 }
             }
+        }
+    }
+    updateZoom() {
+        const canvas = document.getElementById('pixelCanvas')
+        const container = document.querySelector('.canvas-container')
+        
+        canvas.style.transform = `scale(${this.zoomLevel})`
+        
+        if (this.zoomLevel > 1) {
+            container.classList.add('zoomed')
+            canvas.classList.add('zoomed')
+        } else {
+            container.classList.remove('zoomed')
+            canvas.classList.remove('zoomed')
+        }
+    }
+
+    updateGrid() {
+        const pixels = this.canvas.children
+        for (let i = 0; i < pixels.length; i++) {
+            pixels[i].classList.remove('grid-visible', 'grid-hidden')
+            pixels[i].classList.add(this.gridVisible ? 'grid-visible' : 'grid-hidden')
         }
     }
 

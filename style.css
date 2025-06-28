@@ -214,6 +214,22 @@ body {
     transition: background-color 0.1s ease;
 }
 
+.pixel.grid-visible {
+    border: 1px solid #ddd;
+}
+
+.pixel.grid-hidden {
+    border: 1px solid transparent;
+}
+
+.canvas-container.zoomed {
+    overflow: auto;
+}
+
+.pixel-canvas.zoomed {
+    transform-origin: top left;
+}
+
 .action-buttons {
     display: flex;
     gap: 0.5rem;
